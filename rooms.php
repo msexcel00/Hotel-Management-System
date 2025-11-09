@@ -372,7 +372,7 @@ $roomDetails = [
                     <div class="room-full-card">
                         
                         <div class="room-image-area">
-                            <img src="images/room-<?php echo htmlspecialchars($room['room_id']); ?>-large.jpg" alt="<?php echo htmlspecialchars($room['room_name']); ?>">
+                            <img src="/deluxe_hotel/images/room-<?php echo htmlspecialchars($room['room_id']); ?>.jpg" ... >
                         </div>
                         
                         <div class="room-details-area">
