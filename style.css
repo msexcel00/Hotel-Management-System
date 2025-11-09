@@ -1,0 +1,537 @@
+/* --- Navigation Bar --- */
+
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Make box-sizing predictable for all elements so borders/padding are included in widths
+   This prevents elements (like sidebar links with borders/padding) from overflowing. */
+html {
+    box-sizing: border-box;
+}
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+/* --- Fix: Navigation Bar Layering --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    background-color: #003366; 
+    color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    
+    /* CRITICAL FIX: Give the header a high stacking order */
+    position: relative; /* Must be positioned (relative, absolute, or fixed) to use z-index */
+    z-index: 100; /* Use a high value to ensure it's always on top */
+}
+
+.logo a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.8em;
+    font-weight: 700;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+}
+
+.nav-link, .dropbtn {
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    margin: 0 5px;
+    font-size: 1em;
+    transition: background-color 0.3s;
+    border: none; /* For the button */
+    background: none; /* For the button */
+    cursor: pointer;
+}
+
+.nav-link:hover, .dropbtn:hover {
+    background-color: rgba(255, 255, 255, 0.15); /* Light hover effect */
+    border-radius: 4px;
+}
+
+/* Dropdown Container */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1; /* Ensure it appears above other content */
+    top: 100%; /* Position it right below the button */
+    border-radius: 0 0 4px 4px;
+    padding: 5px 0;
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 0.95em;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Admin Link Styling */
+.admin-link { 
+    border: 1px solid white; 
+    padding: 8px 10px; 
+    border-radius: 4px; 
+    margin-left: 20px;
+    color: white;
+    text-decoration: none;
+} 
+/* Hamburger Icon - Hidden on Desktop */
+.menu-icon {
+    display: none;
+    font-size: 2em;
+    cursor: pointer;
+}
+
+/* Close Button in Sidebar - Hidden on Desktop */
+.close-btn {
+    display: none !important;
+    font-size: 2.5em;
+    position: absolute;
+    top: 5px;
+    right: 25px;
+    color: white;
+    text-decoration: none;
+}
+/* --- Verify: Hero Section Positioning --- */
+.hero-section {
+    background: url('deluxehotel.jpeg') no-repeat center center/cover;
+    height: 80vh;
+    display: flex;
+    justify-content: flex-start; /* Align hero content to the left on wide screens */
+    align-items: center;
+    color: white;
+    padding: 0 80px;
+    position: relative; /* This is correct; it establishes a reference point */
+    z-index: 1; /* Give it a lower index than the navbar */
+    /* background-attachment: fixed can cause performance issues on mobile; we'll disable it for small screens below */
+}
+.hero-section::before { 
+    /* Dark overlay for text readability */
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4); /* 40% opaque black */
+}
+
+/* Hero Content (Left side, for headlines) */
+.hero-content { 
+    z-index: 10;
+    max-width: 500px;
+    text-align: left; /* Ensure hero text and CTA align left */
+    margin-left: 40px; /* slight offset from the left edge for breathing room */
+}
+.hero-content h1 { 
+    font-size: 3.5em; 
+    margin-bottom: 15px; 
+    font-weight: 900;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+.hero-content p { 
+    font-size: 1.2em;
+    font-weight: 300;
+}
+/* Hero-specific primary button to make the main CTA more prominent */
+.hero-button {
+    display: inline-block;
+    background-color: #C8A252;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 14px 26px;
+    font-size: 1.05em;
+    border-radius: 8px;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+}
+.hero-button:hover {
+    background-color: #A88542;
+    transform: translateY(-3px);
+}
+/* --- Room Categories Preview Section Styles --- */
+.room-preview-section {
+    padding: 60px 0;
+    background-color: white;
+}
+.section-title {
+    font-size: 2.5em;
+    color: #003366; 
+    text-align: center;
+    margin-bottom: 10px;
+}
+.section-subtitle {
+    font-size: 1.1em;
+    color: #666;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* --- Room Card Layout using Flexbox --- */
+.room-card-grid {
+    display: flex; /* Activate Flexbox */
+    flex-wrap: wrap; /* Allows cards to wrap to the next line on smaller screens */
+    justify-content: space-between; /* Distributes space evenly between cards */
+    gap: 30px; /* Space between flex items */
+}
+
+/* --- Individual Room Card Styling --- */
+.room-card {
+    /* Use flex: 1 to allow cards to grow, and set a min-width for responsiveness */
+    flex: 1 1 calc(33.333% - 20px); /* 1: Grow, 1: Shrink, Calc: Max width for 3-column layout */
+    min-width: 280px; /* Ensure cards don't get too small */
+    
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+    /* Important for consistent height: make the content a flex column */
+    display: flex; 
+    flex-direction: column;
+}
+
+.room-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.room-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.room-info {
+    padding: 20px;
+    display: flex; /* Make the info content a flex container too */
+    flex-direction: column;
+    flex-grow: 1; /* Allows the info section to take up available height */
+}
+
+.room-description {
+    color: #666;
+    font-size: 0.95em;
+    margin-bottom: 15px;
+    /* Let description flow naturally, then push CTA to bottom */
+}
+
+.details-btn {
+    margin-top: auto; /* Pushes the button to the bottom of the room-info flex container */
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 10px 15px;
+    background-color: #C8A252;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    /* Very light font-weight (100) may not be available in all fonts — use 300 as a safer fallback */
+    font-weight: 300;
+    transition: background-color 0.3s;
+}
+.details-btn:hover {
+    background-color: #A88542;
+}
+/* View All CTA Button Styling */
+.view-all-cta {
+    text-align: center;
+    margin-top: 40px;
+}
+.view-all-cta .submit-btn {
+    max-width: 350px;
+}
+.submit-btn {
+    display: inline-block;
+    padding: 10px 18px;
+    background-color: #C8A252;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background-color 0.2s, transform 0.15s;
+}
+.submit-btn:hover {
+    background-color: #A88542;
+    transform: translateY(-2px);
+}
+/* --- Amenities Section Styles --- */
+.amenities-section {
+    padding: 60px 0;
+    background-color: #f0f4f7; /* Light gray/blue tint to separate it from white sections */
+}
+
+/* Services Grid Layout (Using CSS Grid for a 4-column layout) */
+.services-grid {
+    display: grid;
+    /* Create 4 columns, adjust to 2 or 1 column on smaller screens */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 30px;
+    margin-top: 40px;
+}
+
+/* Individual Service Item Card */
+.service-item {
+    background-color: white;
+    padding: 25px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s;
+    height: 100%; /* Ensures uniform height in the grid row */
+}
+
+.service-item:hover {
+    transform: translateY(-5px);
+}
+
+.service-icon {
+    font-size: 2.5em;
+    color: #C8A252; /* Gold/Accent for icons */
+    display: block;
+    margin-bottom: 10px;
+}
+
+.service-item h3 {
+    color: #003366; /* Primary Blue */
+    font-size: 1.25em;
+    margin-bottom: 8px;
+}
+
+.service-item p {
+    color: #666;
+    font-size: 0.95em;
+}
+
+/* --- Testimonials Section Styles --- */
+.testimonials-section {
+    padding: 60px 0;
+    background-color: white; /* Contrast with the amenities background */
+}
+
+.testimonial-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin-top: 40px;
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
+}
+
+.testimonial-card {
+    flex: 1 1 300px; /* Allows up to 3 cards per row */
+    background-color: #f0f4f7;
+    padding: 30px;
+    border-radius: 8px;
+    border-top: 5px solid #C8A252; /* Gold accent line */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.quote {
+    font-style: italic;
+    color: #444;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.author {
+    font-weight: 700;
+    color: #003366; /* Primary Blue */
+    text-align: right;
+    display: block;
+}
+
+/* --- Footer Styles --- */
+.main-footer {
+    background-color: #003366; /* Primary Blue */
+    color: white;
+    padding-top: 40px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding-bottom: 30px;
+    
+}
+
+.footer-column {
+    flex: 1 1 250px; /* Flex layout for columns */
+  /*   margin-right: 20px; */
+    
+}
+
+.footer-column h4 {
+    color: #C8A252; /* Gold Accent */
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+.footer-column p, .footer-column a {
+    color: #ccc;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+.footer-column a:hover {
+    color: #C8A252;
+}
+
+.footer-bottom {
+    background-color: #002244; /* Darker Blue strip */
+    text-align: center;
+    padding: 15px 0;
+    font-size: 0.85em;
+    border-top: 1px solid #004488;
+}
+/* --- Mobile / Sidebar Styles (Screen less than 768px) --- */
+@media (max-width: 768px) {
+    
+    /* 1. Header Layout Fix: Keep logo and controls spaced out */
+    .navbar {
+        padding: 15px 20px;
+        /* Ensure Admin Link and Icon don't wrap the logo */
+        flex-wrap: nowrap; 
+    }
+    
+    /* 2. Hide Desktop Navigation, Show Mobile Controls */
+    .navbar nav {
+        display: none; /* Hide horizontal nav links */
+    }
+    .menu-icon {
+        display: block; /* Show hamburger icon */
+        order: 2; /* Position icon after logo */
+        margin-left: auto; /* Push icon towards the right */
+    }
+    .admin-link {
+        order: 3; /* Position Admin Link on the far right */
+    }
+
+    /* 3. Sidebar Styling (The default hidden state) */
+    nav#mobileNav {
+        /* CRITICAL: Positioning for the slide-out effect */
+        display: flex; 
+        flex-direction: column;
+        position: fixed;
+        width: 250px;
+        height: 100%;
+        top: 0;
+        right: -250px; /* Hidden off-screen */
+        background-color: #003366;
+        padding-top: 50px;
+        transition: right 0.3s ease-in-out;
+        z-index: 150; /* Higher than everything */
+    }
+
+    /* Make the sidebar scrollable when its content exceeds the viewport height.
+       Use max-height to confine the scrollbar within the sidebar. */
+    nav#mobileNav {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+        max-height: 100vh; /* confine to viewport height */
+        box-sizing: border-box; /* ensure padding/border included in width */
+        padding-right: 12px; /* space for scrollbar so inner content doesn't get clipped */
+    }
+    
+    /* 4. Sidebar Open State (Triggered by JS) */
+    nav#mobileNav.open {
+        right: 0; /* Slide in */
+    }
+
+    /* 5. Styling the Sidebar Links */
+    nav#mobileNav a:not(.close-btn) {
+        padding: 15px 20px; /* slightly reduce horizontal padding to allow for scrollbar */
+        border-bottom: 1px solid #7f98b1;
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box; /* include border/padding inside width to avoid overflow */
+    }
+    
+    /* Show the close button */
+    .close-btn {
+        display: block !important; 
+    }
+
+    /* Fix 1: Ensure Dropdown Content is always visible inside the sidebar */
+    .dropdown-content {
+        display: none; /* CRITICAL: Force the content to display */
+        position: static; /* CRITICAL: Prevents it from floating outside the flow */
+        background-color: #002244; /* Slightly darker background for separation */
+        color: #f0f4f7;
+        box-shadow: none;
+        padding-left: 20px;
+        border-radius: 0;
+        /* Ensure there's enough padding to see all links */
+        padding-top: 5px; 
+        padding-bottom: 5px; 
+    }
+
+    /* Disable fixed background on small screens for performance and smoother scrolling */
+    .hero-section {
+        background-attachment: scroll;
+    }
+    
+    /* Remove the hover effect that hides it, as it's static now */
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    
+    /* Give the inner links proper padding */
+    .dropdown-content a {
+        padding: 10px 0 10px 10px; /* Adjust padding for inner links */
+    }
+}
+
+/* Additional small-screen hero tweaks: center hero content and make hero CTA stack nicely */
+@media (max-width: 768px) {
+    .hero-section {
+        justify-content: center; /* center hero block on small screens */
+        padding: 40px 20px; /* smaller padding on mobile */
+        height: auto; /* allow content to size naturally */
+    }
+    .hero-content {
+        text-align: center;
+        margin-left: 0;
+        max-width: 100%;
+    }
+    .hero-content h1 {
+        font-size: 2em;
+    }
+    .hero-button {
+        display: block;
+        width: 100%;
+        max-width: 360px;
+        margin: 18px auto 0 auto;
+    }
+}
+    
