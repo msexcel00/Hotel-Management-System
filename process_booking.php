@@ -107,6 +107,51 @@ try {
     // Get the last inserted ID
     $lastId = $pdo->lastInsertId();
 
+    // --- 6. SEND BOOKING CONFIRMATION EMAIL (NEW CODE) ---
+    
+    $to = $guestEmail;
+    $subject = "Booking Confirmed - Deluxe Hotel (Booking #{$lastId})";
+    
+    // Build the live cancellation link
+    // ** IMPORTANT: Change 'deluxe_hotel' if your folder name is different **
+    $cancellation_link = "http://" . $_SERVER['HTTP_HOST'] . "/deluxe_hotel/cancel.php?key=" . $cancellation_key;
+
+    $email_body = "
+    <html>
+    <body style='font-family: Arial, sans-serif; line-height: 1.6;'>
+        <h2>Thank You for Your Booking, {$guestName}!</h2>
+        <p>Your reservation (Booking ID: <strong>{$lastId}</strong>) with Deluxe Hotel is confirmed.</p>
+        <br>
+        <p><strong>Check-in:</strong> {$checkIn}</p>
+        <p><strong>Check-out:</strong> {$checkOut}</p>
+        <p><strong>Total Cost:</strong> $" . number_format($totalCost, 2) . "</p>
+        <hr>
+        <p>If you need to cancel, please use the secure link below. This link is unique to your reservation.</p>
+        <p style='margin-top: 20px;'>
+            <a href='{$cancellation_link}' 
+               style='background-color: #DC3545; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px;'>
+               Click Here to Cancel Your Reservation
+            </a>
+        </p>
+        <br>
+        <p>We look forward to welcoming you!</p>
+        <p>Sincerely,<br>The Deluxe Hotel Team</p>
+    </body>
+    </html>
+    ";
+    
+    // Set headers for HTML email
+    $headers = "MIME-Version: 1.0" . "\r\n";
+    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+    // ** IMPORTANT: Use the same email you set up in sendmail.ini **
+    $headers .= 'From: <your-email@gmail.com>' . "\r\n"; 
+    
+    // Send the email
+    mail($to, $subject, $email_body, $headers);
+    
+    // --- END OF NEW EMAIL LOGIC ---
+
+
     // Success! Redirect to a confirmation page
     header("location: confirmation.php?booking_id=" . $lastId . "&key=" . $cancellation_key);
     exit;

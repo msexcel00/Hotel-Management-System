@@ -5,7 +5,7 @@ $_SESSION = array();
 // Destroy the session
 session_destroy();
 
-// CRITICAL FIX: Redirect to the home page instead of the login page
+// Redirect to the login page
 header("location: admin_login.php"); 
 exit;
 ?>

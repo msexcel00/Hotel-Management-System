@@ -14,6 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $valid_username = 'admin';
     // NOTE: In a real app, ALWAYS hash the password and check against the hash from the database.
     $valid_password = 'password123'; 
+    $hash = password_hash($valid_password, PASSWORD_DEFAULT);
 
     if ($username === $valid_username && $password === $valid_password) {
         // Login successful

@@ -193,6 +193,32 @@ try {
 .action-link.edit:hover {
     background-color: #A88542;
 }
+/* --- New Responsive Fix for Tables --- */
+
+/* This wrapper will contain the scrollbar on mobile */
+.table-wrapper {
+    overflow-x: auto; /* This is the magic line */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    border-radius: 8px; /* Optional: matches your container style */
+}
+
+@media (max-width: 768px) {
+    /* Force the table to be wide so it triggers the scrollbar */
+    .dashboard-table {
+        min-width: 900px; 
+    }
+
+    /* Make filters stack vertically for more space */
+    .filter-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .filter-input, .filter-select, .filter-btn {
+        width: 100%;
+        box-sizing: border-box; /* Ensure padding doesn't break width */
+    }
+}
 </style>
 <body>
     <div class="admin-container" style="max-width: 90%;">
@@ -240,6 +266,7 @@ try {
         <?php if (empty($bookings)): ?>
             <p>No reservations found in the system.</p>
         <?php else: ?>
+            <div class="table-wrapper">
             <table class="dashboard-table">
                 <thead>
                     <tr>
@@ -290,6 +317,7 @@ try {
                     <?php endforeach; ?>
                 </tbody>
             </table>
+            </div>
         <?php endif; ?>
     </div>
 </body>
