@@ -2,39 +2,39 @@
 session_start();
 require_once 'config.php'; 
 
-// Security check (keep this at the top)
+
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header("location: admin_login.php");
     exit;
 }
 
-// --- 1. Collect Filter/Search Parameters ---
+
 $search = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_STRING);
 $status = filter_input(INPUT_GET, 'status', FILTER_SANITIZE_STRING);
 
 $whereClauses = [];
 $params = [];
 
-// --- 2. Build Dynamic WHERE Clauses ---
 
-// A. Search by Name or Email
+
+
 if (!empty($search)) {
     $whereClauses[] = "(b.guest_name LIKE :search OR b.guest_email LIKE :search)";
     $params[':search'] = '%' . $search . '%';
 }
 
-// B. Filter by Status
+
 if (!empty($status)) {
     $whereClauses[] = "b.status = :status";
     $params[':status'] = $status;
 }
 
-// --- 3. Construct the Final SQL Query ---
+
 $sql = "SELECT b.*, r.room_name 
         FROM bookings b 
         JOIN rooms r ON b.room_id = r.room_id";
 
-// Apply WHERE clause if any filters are active
+
 if (!empty($whereClauses)) {
     $sql .= " WHERE " . implode(' AND ', $whereClauses);
 }
@@ -48,7 +48,7 @@ try {
     $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (PDOException $e) {
-    // In a real app, you'd log this, but for testing:
+    
     die("Database ERROR fetching bookings: " . $e->getMessage()); 
 }
 ?>

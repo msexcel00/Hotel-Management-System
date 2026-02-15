@@ -4,19 +4,19 @@ header('Content-Type: application/json');
 
 $response = ['available' => false, 'message' => 'Invalid request.'];
 
-// 1. Get Input
+
 $roomId = filter_input(INPUT_POST, 'room_id', FILTER_VALIDATE_INT);
 $checkIn = filter_input(INPUT_POST, 'check_in_date', FILTER_SANITIZE_SPECIAL_CHARS);
 $checkOut = filter_input(INPUT_POST, 'check_out_date', FILTER_SANITIZE_SPECIAL_CHARS);
 
 if ($roomId && $checkIn && $checkOut) {
     try {
-        // 2. Get Total Units
+        
         $stmt = $pdo->prepare("SELECT total_units FROM rooms WHERE room_id = ?");
         $stmt->execute([$roomId]);
         $totalUnits = $stmt->fetchColumn();
 
-        // 3. Count Overlapping Bookings (Same logic as process_booking.php)
+        
         $stmt = $pdo->prepare("
             SELECT COUNT(booking_id) AS booked_count
             FROM bookings
@@ -30,7 +30,7 @@ if ($roomId && $checkIn && $checkOut) {
         
         $availableCount = $totalUnits - $bookedCount;
 
-        // 4. Determine Availability
+        
         if ($availableCount > 0) {
             $response['available'] = true;
             $response['message'] = "Great! We have {$availableCount} rooms of this type available.";

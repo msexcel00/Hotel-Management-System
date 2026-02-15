@@ -2,18 +2,18 @@
 session_start();
 require_once 'config.php'; 
 
-// --- 1. Fetch ALL room details ---
+
 $allRooms = [];
 try {
-    // Select all room details from the rooms table
+    
     $stmt = $pdo->query("SELECT room_id, room_name, price, total_units FROM rooms ORDER BY price ASC");
     $allRooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    // Handle database error gracefully
+    
     $error = "Could not retrieve room data. Please try again later.";
 }
 
-// Dummy descriptions for presentation (in a real app, these would be in the database)
+
 $descriptions = [
     'Standard Single' => 'A cozy, well-appointed room featuring one plush double bed, ideal for solo travelers or short business stays. Enjoy complimentary high-speed Wi-Fi.',
     'Double Deluxe' => 'Spacious and elegant, this room offers two queen beds or one king bed, a sitting area, and a luxurious marble bathroom. Perfect for families or couples.',
@@ -22,10 +22,10 @@ $descriptions = [
 ?>
 
 <?php
-// ... [Existing PHP Code: session_start(), require_once 'config.php', and database fetch into $allRooms] ...
 
-// --- DEFINITION OF ROOM FEATURES AND DESCRIPTIONS ---
-// This data drives the content for all room cards
+
+
+
 $roomDetails = [
     'Standard Single' => [
         'description' => 'A cozy, well-appointed room featuring one plush double bed, ideal for solo travelers or short business stays. Offers excellent value and comfort.',
@@ -367,7 +367,7 @@ $roomDetails = [
             <?php else: ?>
 
                 <?php foreach ($allRooms as $room): 
-                    $details = $roomDetails[$room['room_name']] ?? []; // Get detailed feature set
+                    $details = $roomDetails[$room['room_name']] ?? []; 
                 ?>
                     <div class="room-full-card">
                         
@@ -469,42 +469,42 @@ $roomDetails = [
 </div>
 
       <script>
-    // --- 1. Modal Control Functions ---
+    
     const modal = document.getElementById('bookingModal');
     const closeModalBtn = document.querySelector('.close-btn');
     const roomSelect = document.getElementById('modal_room_id');
 
-    // Function to OPEN the modal and pre-select a room
+    
     function openBookingModal(roomId = null) {
         modal.style.display = 'flex';
-        // Pre-select the room if an ID was passed
+        
         if (roomId) {
             roomSelect.value = roomId;
         }
     }
 
-    // Function to CLOSE the modal
+    
     function closeBookingModal() {
         modal.style.display = 'none';
-        // Optional: Clear form errors on close
+        
         document.getElementById('modal-error-display').textContent = '';
     }
 
-    // Close when the 'x' is clicked
+    
     closeModalBtn.onclick = closeBookingModal;
 
-    // Close when clicking outside the modal content
+    
     window.onclick = function(event) {
         if (event.target == modal) {
             closeBookingModal();
         }
     }
     
-    // --- 2. Implement Basic Form Validation (From Step 7) ---
-    // You would integrate the full form validation logic here as planned for Step 7.
-    // For now, ensure your inputs have the required IDs (check 2A).
+    
+    
+    
     document.addEventListener('DOMContentLoaded', function () {
-        // --- 1. Form Element Variables ---
+        
         const form = document.getElementById('modalBookingForm');
         const checkInDateInput = document.getElementById('modal_check_in_date');
         const checkOutDateInput = document.getElementById('modal_check_out_date');
@@ -515,23 +515,23 @@ $roomDetails = [
         const guestEmailInput = document.getElementById('modal_guest_email');
     /* Use the existing modal error display area for AJAX feedback (ajaxFeedback element was not present) */
     const ajaxFeedback = errorDisplay; 
-        const submitButton = form.querySelector('.submit-btn'); // Assuming this element exists
+        const submitButton = form.querySelector('.submit-btn'); 
 
         const today = new Date();
         today.setHours(0, 0, 0, 0); 
         const todayISO = today.toISOString().split('T')[0];
         
-        // Set the minimum check-in date allowed (today's date)
+        
         checkInDateInput.setAttribute('min', todayISO);
 
-// --- NEW AJAX SUBMISSION LOGIC (with Validation) ---
+
     form.addEventListener('submit', function (event) {
-        event.preventDefault(); // ALWAYS prevent default submission first
+        event.preventDefault(); 
         
-        // --- START: Client-side validation ---
+        
         let isValid = true;
         let errorMessage = '';
-        errorDisplay.textContent = ''; // Clear old errors
+        errorDisplay.textContent = ''; 
 
         const checkIn = new Date(checkInDateInput.value);
         const checkOut = new Date(checkOutDateInput.value);
@@ -548,17 +548,17 @@ $roomDetails = [
         }
         
         if (!isValid) { 
-            // Display validation error
+            
             errorDisplay.textContent = 'Booking Error: ' + errorMessage;
             errorDisplay.style.padding = '10px';
             errorDisplay.style.border = '1px solid #DC3545';
             errorDisplay.style.backgroundColor = '#ffeeee';
-            return; // Stop processing
+            return; 
         }
-        // --- END: Client-side validation ---
+        
 
         
-        // --- Start AJAX Call (Only if validation passed) ---
+        
         const formData = new FormData(form);
 
         ajaxFeedback.innerHTML = '<span style="color: #003366;">Checking availability...</span>';
@@ -574,7 +574,7 @@ $roomDetails = [
             
             if (data.available) {
                 ajaxFeedback.innerHTML = `<span style="color: green; font-weight: bold;">${data.message}</span>`;
-                // Manually submit the form to process_booking.php
+                
                 setTimeout(() => { form.submit(); }, 500); 
             } else {
                 ajaxFeedback.innerHTML = `<span style="color: red; font-weight: bold;">${data.message}</span>`;
@@ -586,11 +586,11 @@ $roomDetails = [
         });
     });
         
-        // --- 3. Modal Control Functions (Ensure these are here too!) ---
+        
         const modal = document.getElementById('bookingModal');
         const closeModalBtn = document.querySelector('.close-btn');
 
-        // Function to OPEN the modal (triggered by 'Book Now' button)
+        
         window.openBookingModal = function(roomId = null) {
             modal.style.display = 'flex';
             if (roomId) {
@@ -598,10 +598,10 @@ $roomDetails = [
             }
         }
 
-        // Function to CLOSE the modal
+        
         function closeBookingModal() {
             modal.style.display = 'none';
-            errorDisplay.textContent = ''; // Clear errors on close
+            errorDisplay.textContent = ''; 
         }
 
         closeModalBtn.onclick = closeBookingModal;
@@ -614,11 +614,11 @@ $roomDetails = [
         /* Price calculation helper and listeners must run inside DOMContentLoaded so
            they can access check-in/out inputs defined above in this scope. */
         function calculatePrice() {
-            // 1. Get room price
+            
             const selectedOption = roomSelect.options[roomSelect.selectedIndex];
             const price = selectedOption ? selectedOption.getAttribute('data-price') : null;
 
-            // 2. Get dates
+            
             const checkIn = checkInDateInput.value;
             const checkOut = checkOutDateInput.value;
 
@@ -627,31 +627,31 @@ $roomDetails = [
                 return;
             }
 
-            // 3. Calculate number of nights
+            
             const date1 = new Date(checkIn);
             const date2 = new Date(checkOut);
 
-            // Ensure check-out is after check-in
+            
             if (date2 <= date1) {
                 priceDisplay.textContent = 'Total Cost: Invalid Dates';
                 return;
             }
 
             const timeDiff = Math.abs(date2.getTime() - date1.getTime());
-            const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); // Convert milliseconds to days
+            const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
 
-            // 4. Calculate total cost
+            
             const totalCost = (diffDays * parseFloat(price)).toFixed(2);
 
             priceDisplay.textContent = `Total Cost: $${totalCost} (${diffDays} nights)`;
         }
 
-        // Add event listeners to trigger the calculation on change
+        
         roomSelect.addEventListener('change', calculatePrice);
         checkInDateInput.addEventListener('change', calculatePrice);
         checkOutDateInput.addEventListener('change', calculatePrice);
 
-        // Run calculation initially in case a room was preselected via URL
+        
         calculatePrice();
     });
 </script>
@@ -691,7 +691,7 @@ $roomDetails = [
 <script>
     function toggleNav() {
         const nav = document.getElementById("mobileNav");
-        // Toggles the 'open' class which moves the menu in/out via CSS transition
+        
         nav.classList.toggle('open');
     }
 </script>

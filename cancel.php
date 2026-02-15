@@ -4,38 +4,38 @@ require_once 'config.php';
 $message = "Invalid or expired cancellation link.";
 $success = false;
 
-// 1. Get the key from the URL
+
 $raw_key = $_GET['key'] ?? '';
 
-// 2. CRITICAL FIX: Use a regular expression to extract ONLY the 32-character key
-preg_match('/[a-f0-9]{32}/', $raw_key, $matches);
-$cancellation_key = $matches[0] ?? ''; // This will be the pure 32-character key, or empty
 
-// 3. Check if the key is valid
+preg_match('/[a-f0-9]{32}/', $raw_key, $matches);
+$cancellation_key = $matches[0] ?? ''; 
+
+
 if (!empty($cancellation_key) && strlen($cancellation_key) == 32) {
     
     try {
-        // 4. Look for a booking with this key
-        // --- MODIFICATION 1: Fetch guest_email and booking_id ---
+        
+        
         $stmt = $pdo->prepare("SELECT booking_id, guest_email, status FROM bookings WHERE cancellation_key = :key");
         $stmt->bindParam(':key', $cancellation_key, PDO::PARAM_STR);
         $stmt->execute();
         $booking = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // 5. Check what we found
+        
         if ($booking) {
-            // A booking was found!
+            
             if ($booking['status'] !== 'Cancelled') {
-                // Cancel it
+                
                 $stmt = $pdo->prepare("UPDATE bookings SET status = 'Cancelled' WHERE cancellation_key = :key");
                 $stmt->bindParam(':key', $cancellation_key, PDO::PARAM_STR);
                 $stmt->execute();
                 
-                // --- MODIFICATION 2: Update success message ---
+                
                 $message = "Your reservation has been successfully CANCELLED. A confirmation email has been sent to {$booking['guest_email']}.";
                 $success = true;
 
-                // --- MODIFICATION 3: Send the confirmation email ---
+                
                 $to = $booking['guest_email'];
                 $booking_id = $booking['booking_id'];
                 $subject = "Cancellation Confirmation - Deluxe Hotel (Booking #{$booking_id})";
@@ -53,14 +53,14 @@ if (!empty($cancellation_key) && strlen($cancellation_key) == 32) {
                 </html>
                 ";
                 
-                // Set headers for HTML email
+                
                 $headers = "MIME-Version: 1.0" . "\r\n";
                 $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-                $headers .= 'From: <noreply@deluxehotel.com>' . "\r\n"; // Your "From" address
+                $headers .= 'From: <noreply@deluxehotel.com>' . "\r\n"; 
                 
-                // Send the email
+                
                 mail($to, $subject, $email_body, $headers);
-                // --- END OF NEW EMAIL LOGIC ---
+                
 
             } else {
                 $message = "This reservation was already cancelled.";

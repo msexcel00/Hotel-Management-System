@@ -1,11 +1,11 @@
 <?php
-// Start session and include config (DB connection)
+
 session_start();
 require_once 'config.php';
 
-// --- GALLERY DATA ---
+
 $galleryImages = [
-    // You will need to create dummy images in your project folder named these paths:
+    
     ['path' => 'images/gallery-exterior.jpg', 'caption' => 'The Grand Entrance and Facade of Deluxe Hotel.'],
     ['path' => 'images/gallery-lobby.jpg', 'caption' => 'The Luxurious Lobby and Reception Area.'],
     ['path' => 'images/gallery-pool.jpg', 'caption' => 'Our Stunning Rooftop Pool with Ocean Views.'],
@@ -190,7 +190,7 @@ $galleryImages = [
     <script>
         function toggleNav() {
             const nav = document.getElementById("mobileNav");
-            // Toggles the 'open' class which moves the menu in/out via CSS transition
+            
             nav.classList.toggle('open');
         }
     </script>

@@ -1,18 +1,18 @@
 <?php
 session_start();
-// Include the database connection and fetch rooms logic here (as previously defined)
+
 require_once 'config.php'; 
 
-// --- 1. Fetch available rooms to populate the dropdown and preview ---
-$rooms = []; // Initialize as an empty array to prevent the "Undefined variable" warning
+
+$rooms = []; 
 try {
-    // $pdo must be available from config.php
+    
     $stmt = $pdo->query("SELECT room_id, room_name, price FROM rooms");
     $rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    // If there is a database error, this will print it
+    
     echo "Database Error: " . $e->getMessage(); 
-    // You should also verify that the 'rooms' table exists and has data.
+    
 }
 ?>
 <!DOCTYPE html>
@@ -73,8 +73,8 @@ try {
         <div class="room-card-grid">
             
             <?php 
-            // Reuse the $rooms array fetched at the top of index.php
-            // We'll limit this preview to the first 3 rooms for a clean look
+            
+            
             $preview_limit = 3; 
             $count = 0;
             foreach ($rooms as $room): 
@@ -223,7 +223,7 @@ try {
 <script>
     function toggleNav() {
         const nav = document.getElementById("mobileNav");
-        // Toggles the 'open' class which moves the menu in/out via CSS transition
+        
         nav.classList.toggle('open');
     }
 </script>

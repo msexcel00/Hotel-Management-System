@@ -1,11 +1,11 @@
 <?php
-// 1. Include the database connection
+
 require_once 'config.php'; 
 
-// 2. Get the booking ID from the URL
+
 $bookingId = filter_input(INPUT_GET, 'booking_id', FILTER_VALIDATE_INT);
 
-// Basic validation check
+
 if (!$bookingId) {
     die("Invalid booking ID provided.");
 }
@@ -13,8 +13,8 @@ if (!$bookingId) {
 $bookingDetails = null;
 
 try {
-    // 3. Prepare and Execute Query to retrieve booking and room details
-    // We join the 'bookings' and 'rooms' tables to get the room name and price.
+    
+    
     $stmt = $pdo->prepare("
         SELECT 
             b.*, r.room_name, r.price 
@@ -37,7 +37,7 @@ try {
     die("Database error: Could not retrieve booking details. " . $e->getMessage());
 }
 
-// Helper function to format dates
+
 $formatDate = function($date) {
     return date("F j, Y", strtotime($date));
 };

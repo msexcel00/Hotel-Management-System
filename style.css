@@ -6,15 +6,13 @@ body{
     box-sizing: border-box;
 }
 
-/* Make box-sizing predictable for all elements so borders/padding are included in widths
-   This prevents elements (like sidebar links with borders/padding) from overflowing. */
 html {
     box-sizing: border-box;
 }
 *, *::before, *::after {
     box-sizing: inherit;
 }
-/* --- Fix: Navigation Bar Layering --- */
+
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -24,9 +22,9 @@ html {
     color: white;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     
-    /* CRITICAL FIX: Give the header a high stacking order */
-    position: relative; /* Must be positioned (relative, absolute, or fixed) to use z-index */
-    z-index: 100; /* Use a high value to ensure it's always on top */
+    
+    position: relative; 
+    z-index: 100; 
 }
 
 .logo a {

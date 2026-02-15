@@ -1,23 +1,23 @@
 <?php
 session_start();
-// Include the database connection (optional here, but good practice if checking credentials against a table)
+
 require_once 'config.php'; 
 
 $error = '';
 
-// Check if form was submitted
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS);
     $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
 
-    // Hardcoded credentials for MVP (Replace with database check later)
+    
     $valid_username = 'admin';
-    // NOTE: In a real app, ALWAYS hash the password and check against the hash from the database.
+    
     $valid_password = 'password123'; 
     $hash = password_hash($valid_password, PASSWORD_DEFAULT);
 
     if ($username === $valid_username && $password === $valid_password) {
-        // Login successful
+        
         $_SESSION['loggedin'] = true;
         $_SESSION['username'] = $username;
         header("location: admin_dashboard.php");
